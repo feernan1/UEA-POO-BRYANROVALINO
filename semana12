@@ -1,0 +1,32 @@
+class Videojuego:
+    def __init__(self, titulo, desarrollador, genero, año_lanzamiento):
+        self.titulo = titulo
+        self.desarrollador = desarrollador
+        self.genero = genero
+        self.año_lanzamiento = año_lanzamiento
+
+class Jugador:
+    def __init__(self, nombre, id_jugador):
+        self.nombre = nombre
+        self.id_jugador = id_jugador
+        self.juegos_alquilados = []
+
+class VideoclubJuegos:
+    def __init__(self):
+        self.juegos = {}  # Diccionario: Año de lanzamiento -> Videojuego
+        self.jugadores = set()
+        self.alquileres = {}
+
+    # ... (resto de los métodos, adaptando los nombres y funcionalidades)
+
+# Ejemplo de uso
+videoclub_juegos = VideoclubJuegos()
+
+juego1 = Videojuego("The Legend of Zelda: Breath of the Wild", "Nintendo", "Aventura", 2017)
+videoclub_juegos.agregar_juego(juego1)
+
+jugador1 = Jugador("Mario Rossi", 456)
+videoclub_juegos.registrar_jugador(jugador1)
+
+videoclub_juegos.alquilar_juego(2017, 456)
+videoclub_juegos.listar_juegos_alquilados(456)
