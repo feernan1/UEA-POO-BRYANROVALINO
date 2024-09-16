@@ -1,0 +1,74 @@
+import tkinter as tk
+import json
+
+# Crear la ventana principal
+ventana = tk.Tk()
+ventana.title("Gestor de Tareas")
+
+# Crear los elementos de la interfaz
+etiqueta = tk.Label(ventana, text="Ingrese una nueva tarea:")
+etiqueta.pack()
+
+entrada_tarea = tk.Entry(ventana)
+entrada_tarea.pack()
+
+lista_tareas = tk.Listbox(ventana)
+lista_tareas.pack()
+
+# Variables para almacenar las tareas
+tareas = []
+
+def cargar_tareas():
+    try:
+        with open('tareas.json', 'r') as f:
+            global tareas
+            tareas = json.load(f)
+            for tarea in tareas:
+                lista_tareas.insert(tk.END, tarea)
+    except FileNotFoundError:
+        pass  # Si el archivo no existe, se crea uno nuevo
+
+def guardar_tareas():
+    with open('tareas.json', 'w') as f:
+        json.dump(tareas, f)
+
+def agregar_tarea():
+    tarea = entrada_tarea.get()
+    tareas.append(tarea)
+    lista_tareas.insert(tk.END, tarea)
+    entrada_tarea.delete(0, tk.END)
+    guardar_tareas()
+
+def eliminar_tarea():
+    indice_seleccionado = lista_tareas.curselection()
+    if indice_seleccionado:
+        for indice in indice_seleccionado:
+            del tareas[indice]
+            lista_tareas.delete(indice)
+        guardar_tareas()
+
+def marcar_como_completada():
+    indice_seleccionado = lista_tareas.curselection()
+    if indice_seleccionado:
+        for indice in indice_seleccionado:
+            tarea = tareas[indice]
+            tareas[indice] = f"✅ {tarea}"
+            lista_tareas.delete(indice)
+            lista_tareas.insert(indice, tareas[indice])
+        guardar_tareas()
+
+# Cargar las tareas al iniciar la aplicación
+cargar_tareas()
+
+# Botones
+boton_agregar = tk.Button(ventana, text="Agregar Tarea", command=agregar_tarea)
+boton_agregar.pack()
+
+boton_eliminar = tk.Button(ventana, text="Eliminar Tarea", command=eliminar_tarea)
+boton_agregar.pack()
+
+boton_marcar = tk.Button(ventana, text="Marcar como Completada", command=marcar_como_completada)
+boton_marcar.pack()
+
+# Iniciar el bucle principal de la aplicación
+ventana.mainloop()
