@@ -1,0 +1,89 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
+
+class AgendaApp:
+    def __init__(self, master):
+        self.master = master
+        master.title("Mi Agenda Personal")  # Título de la ventana
+
+        # Marco para la lista de eventos
+        self.event_frame = ttk.Frame(master)
+        self.event_frame.pack(fill="both", expand=True)
+
+        # Treeview para mostrar eventos
+        self.event_list = ttk.Treeview(self.event_frame, columns=("Fecha", "Hora", "Descripción"))
+        self.event_list.heading("#0", text="ID")  # ID opcional para seguimiento interno
+        self.event_list.heading("Fecha", text="Fecha")
+        self.event_list.heading("Hora", text="Hora")
+        self.event_list.heading("Descripción", text="Descripción")
+        self.event_list.pack(fill="both", expand=True)
+
+        # Marco para los campos de entrada
+        self.entry_frame = ttk.Frame(master)
+        self.entry_frame.pack(fill="x")
+
+        # Etiquetas y campos de entrada
+        self.date_label = ttk.Label(self.entry_frame, text="Fecha:")
+        self.date_label.pack(side="left")
+        self.date_entry = ttk.Entry(self.entry_frame)
+        self.date_entry.pack(side="left")
+
+        # ... (similar para Hora y Descripción)
+
+        # Botones
+        self.add_button = ttk.Button(master, text="Agregar Evento", command=self.add_event)
+        self.add_button.pack()
+        self.delete_button = ttk.Button(master, text="Eliminar Evento", command=self.delete_event)
+        self.delete_button.pack()
+
+        # Almacén de datos de eventos (reemplaza con tu método preferido)
+        self.events = []  # Lista vacía para almacenar eventos (fecha, hora, descripción)
+
+    def add_event(self):
+        # Obtener datos de los campos de entrada
+        date = self.date_entry.get()
+        time = ...  # Implementa la lógica para obtener la hora (Entrada, Desplegable, etc.)
+        description = ...  # Implementa la lógica para obtener la descripción (Entrada, Texto, etc.)
+
+        # Validar datos (opcional, agrega comprobaciones de formato, conflictos, etc.)
+        # if not validate_data(date, time, description):
+        #     messagebox.showerror("Error", "Datos inválidos. Intente nuevamente.")
+        #     return
+
+        # Crear un nuevo diccionario de eventos (o una clase personalizada)
+        new_event = {"date": date, "time": time, "description": description}
+
+        # Agregar evento al almacenamiento de datos
+        self.events.append(new_event)
+
+        # Actualizar Treeview (considera usar insert en lugar de clear/insert para mayor eficiencia)
+        self.event_list.delete(*self.event_list.get_children())
+        for event in self.events:
+            self.event_list.insert("", "end", values=(event["date"], event["time"], event["description"]))
+
+        # Limpiar los campos de entrada para el siguiente evento
+        self.date_entry.delete(0, tk.END)
+        # ... (limpiar otros campos de entrada)
+
+    def delete_event(self):
+        # Obtener el elemento seleccionado de Treeview
+        selected_item = self.event_list.focus()
+        if not selected_item:
+            messagebox.showinfo("Aviso", "Seleccione un evento para eliminar.")
+            return
+
+        # Diálogo de confirmación
+        if messagebox.askyesno("Confirmar", "¿Seguro que desea eliminar este evento?"):
+            # Encontrar el índice del evento en el almacenamiento de datos según el ID (si se usa la columna ID) o la selección de Treeview
+            event_index = ...  # Implementa la lógica para encontrar el índice del evento
+
+            # Eliminar evento del almacenamiento de datos
+            del self.events[event_index]
+
+            # Actualizar Treeview
+            self.event_list.delete(selected_item)
+
+# Crear la ventana principal y la instancia de la aplicación
+root = tk.Tk()
+app = AgendaApp(root)
+root.mainloop()
