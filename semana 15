@@ -1,0 +1,46 @@
+import tkinter as tk
+import json
+import datetime
+from tkinter import messagebox
+
+def cargar_tareas():
+    # ... (código original)
+
+def guardar_tareas():
+    # ... (código original)
+
+# ... (resto del código original)
+
+def agregar_tarea():
+    tarea = entrada_tarea.get().strip()
+    prioridad = prioridad_var.get()
+    fecha_vencimiento = fecha_vencimiento_var.get()
+    if tarea:
+        # Validación de la fecha (implementar una función para esto)
+        if validar_fecha(fecha_vencimiento):
+            nueva_tarea = {"prioridad": prioridad, "fecha_vencimiento": fecha_vencimiento, "tarea": tarea}
+            lista_tareas.insert(tk.END, nueva_tarea)
+            entrada_tarea.delete(0, tk.END)
+            fecha_vencimiento_var.set("")
+            guardar_tareas()
+        else:
+            messagebox.showerror("Error", "Fecha de vencimiento inválida")
+
+def marcar_como_completada():
+    # ... (código modificado para trabajar con el nuevo formato de tarea)
+    indice_seleccionado = lista_tareas.curselection()
+    if indice_seleccionado:
+        tarea_seleccionada = lista_tareas.get(indice_seleccionado)
+        # ... (marcar la tarea como completada)
+
+def eliminar_tarea():
+    # ... (código similar a antes)
+
+# Función para validar la fecha
+def validar_fecha(fecha):
+    try:
+        datetime.datetime.strptime(fecha, "%Y-%m-%d")
+        return True
+    except ValueError:
+        return False
+
